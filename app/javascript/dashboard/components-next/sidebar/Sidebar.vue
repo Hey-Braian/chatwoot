@@ -58,6 +58,7 @@ provideSidebarContext({
 const inboxes = useMapGetter('inboxes/getInboxes');
 const labels = useMapGetter('labels/getLabelsOnSidebar');
 const teams = useMapGetter('teams/getMyTeams');
+const contactCustomViews = useMapGetter('customViews/getContactCustomViews');
 const conversationCustomViews = useMapGetter(
   'customViews/getConversationCustomViews'
 );
@@ -69,6 +70,7 @@ onMounted(() => {
   store.dispatch('teams/get');
   store.dispatch('attributes/get');
   store.dispatch('customViews/get', 'conversation');
+  store.dispatch('customViews/get', 'contact');
 });
 
 const sortedInboxes = computed(() =>
@@ -196,91 +198,91 @@ const menuItems = computed(() => {
         },
       ],
     },
-    // {
-    //   name: 'Captain',
-    //   icon: 'i-woot-captain',
-    //   label: t('SIDEBAR.CAPTAIN'),
-    //   children: [
-    //     {
-    //       name: 'Assistants',
-    //       label: t('SIDEBAR.CAPTAIN_ASSISTANTS'),
-    //       to: accountScopedRoute('captain_assistants_index'),
-    //     },
-    //     {
-    //       name: 'Documents',
-    //       label: t('SIDEBAR.CAPTAIN_DOCUMENTS'),
-    //       to: accountScopedRoute('captain_documents_index'),
-    //     },
-    //     {
-    //       name: 'Responses',
-    //       label: t('SIDEBAR.CAPTAIN_RESPONSES'),
-    //       to: accountScopedRoute('captain_responses_index'),
-    //     },
-    //   ],
-    // },
-    // {
-    //   name: 'Contacts',
-    //   label: t('SIDEBAR.CONTACTS'),
-    //   icon: 'i-lucide-contact',
-    //   children: [
-    //     {
-    //       name: 'All Contacts',
-    //       label: t('SIDEBAR.ALL_CONTACTS'),
-    //       to: accountScopedRoute(
-    //         'contacts_dashboard_index',
-    //         {},
-    //         { page: 1, search: undefined }
-    //       ),
-    //       activeOn: ['contacts_dashboard_index', 'contacts_edit'],
-    //     },
-    //     {
-    //       name: 'Active',
-    //       label: t('SIDEBAR.ACTIVE'),
-    //       to: accountScopedRoute('contacts_dashboard_active'),
-    //       activeOn: ['contacts_dashboard_active'],
-    //     },
-    //     {
-    //       name: 'Segments',
-    //       icon: 'i-lucide-group',
-    //       label: t('SIDEBAR.CUSTOM_VIEWS_SEGMENTS'),
-    //       children: contactCustomViews.value.map(view => ({
-    //         name: `${view.name}-${view.id}`,
-    //         label: view.name,
-    //         to: accountScopedRoute(
-    //           'contacts_dashboard_segments_index',
-    //           { segmentId: view.id },
-    //           { page: 1 }
-    //         ),
-    //         activeOn: [
-    //           'contacts_dashboard_segments_index',
-    //           'contacts_edit_segment',
-    //         ],
-    //       })),
-    //     },
-    //     {
-    //       name: 'Tagged With',
-    //       icon: 'i-lucide-tag',
-    //       label: t('SIDEBAR.TAGGED_WITH'),
-    //       children: labels.value.map(label => ({
-    //         name: `${label.title}-${label.id}`,
-    //         label: label.title,
-    //         icon: h('span', {
-    //           class: `size-[12px] ring-1 ring-n-alpha-1 dark:ring-white/20 ring-inset rounded-sm`,
-    //           style: { backgroundColor: label.color },
-    //         }),
-    //         to: accountScopedRoute(
-    //           'contacts_dashboard_labels_index',
-    //           { label: label.title },
-    //           { page: 1, search: undefined }
-    //         ),
-    //         activeOn: [
-    //           'contacts_dashboard_labels_index',
-    //           'contacts_edit_label',
-    //         ],
-    //       })),
-    //     },
-    //   ],
-    // },
+    {
+      name: 'Captain',
+      icon: 'i-woot-captain',
+      label: t('SIDEBAR.CAPTAIN'),
+      children: [
+        {
+          name: 'Assistants',
+          label: t('SIDEBAR.CAPTAIN_ASSISTANTS'),
+          to: accountScopedRoute('captain_assistants_index'),
+        },
+        {
+          name: 'Documents',
+          label: t('SIDEBAR.CAPTAIN_DOCUMENTS'),
+          to: accountScopedRoute('captain_documents_index'),
+        },
+        {
+          name: 'Responses',
+          label: t('SIDEBAR.CAPTAIN_RESPONSES'),
+          to: accountScopedRoute('captain_responses_index'),
+        },
+      ],
+    },
+    {
+      name: 'Contacts',
+      label: t('SIDEBAR.CONTACTS'),
+      icon: 'i-lucide-contact',
+      children: [
+        {
+          name: 'All Contacts',
+          label: t('SIDEBAR.ALL_CONTACTS'),
+          to: accountScopedRoute(
+            'contacts_dashboard_index',
+            {},
+            { page: 1, search: undefined }
+          ),
+          activeOn: ['contacts_dashboard_index', 'contacts_edit'],
+        },
+        {
+          name: 'Active',
+          label: t('SIDEBAR.ACTIVE'),
+          to: accountScopedRoute('contacts_dashboard_active'),
+          activeOn: ['contacts_dashboard_active'],
+        },
+        {
+          name: 'Segments',
+          icon: 'i-lucide-group',
+          label: t('SIDEBAR.CUSTOM_VIEWS_SEGMENTS'),
+          children: contactCustomViews.value.map(view => ({
+            name: `${view.name}-${view.id}`,
+            label: view.name,
+            to: accountScopedRoute(
+              'contacts_dashboard_segments_index',
+              { segmentId: view.id },
+              { page: 1 }
+            ),
+            activeOn: [
+              'contacts_dashboard_segments_index',
+              'contacts_edit_segment',
+            ],
+          })),
+        },
+        {
+          name: 'Tagged With',
+          icon: 'i-lucide-tag',
+          label: t('SIDEBAR.TAGGED_WITH'),
+          children: labels.value.map(label => ({
+            name: `${label.title}-${label.id}`,
+            label: label.title,
+            icon: h('span', {
+              class: `size-[12px] ring-1 ring-n-alpha-1 dark:ring-white/20 ring-inset rounded-sm`,
+              style: { backgroundColor: label.color },
+            }),
+            to: accountScopedRoute(
+              'contacts_dashboard_labels_index',
+              { label: label.title },
+              { page: 1, search: undefined }
+            ),
+            activeOn: [
+              'contacts_dashboard_labels_index',
+              'contacts_edit_label',
+            ],
+          })),
+        },
+      ],
+    },
     {
       name: 'Reports',
       label: t('SIDEBAR.REPORTS'),
