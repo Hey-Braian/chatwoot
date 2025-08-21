@@ -257,23 +257,17 @@ createdb chatwoot_development
 # Ejecutar migraciones
 bundle exec rails db:migrate
 
-# Cargar datos iniciales (opcional, puede fallar si ya existen)
-bundle exec rails db:seed
 ```
 
-### Configurar usuario de acceso
 
+### Activar la inicializacion del primer usuario:
 ```bash
-# Crear/actualizar usuario con credenciales conocidas
-bundle exec rails runner "
-user = User.find_or_create_by(email: 'admin@chatwoot.local') do |u|
-  u.name = 'Administrador'
-  u.password = 'Balcami123_'
-  u.password_confirmation = 'Balcami123_'
-end
-user.update!(password: 'Balcami123_', password_confirmation: 'Balcami123_')
-puts '✅ Usuario configurado: admin@chatwoot.local / Balcami123_'
-"
+# Verificar si esta activado el /installation/onboarding
+bundle exec rails runner "puts 'Onboarding disponible: ' + (::Redis::Alfred.get(::Redis::Alfred::CHATWOOT_INSTALLATION_ONBOARDING) ? 'SÍ' : 'NO')"
+
+# Activar el onboarding:
+bundle exec rails runner "::Redis::Alfred.set(::Redis::Alfred::CHATWOOT_INSTALLATION_ONBOARDING, true)"
+
 ```
 
 ## 🚀 Paso 11: Iniciar el Entorno de Desarrollo
@@ -295,11 +289,8 @@ bundle exec vite dev
 ```
 
 ### Acceder a la aplicación
+`http://localhost:3000`
 
-1. **Abrir navegador en:** `http://localhost:3000`
-2. **Credenciales de acceso:**
-   - Email: `admin@chatwoot.local`
-   - Contraseña: `Balcami123_`
 
 ## 🔄 Comandos de Uso Diario
 
@@ -337,7 +328,7 @@ bundle exec rails db:migrate
 bundle exec rails db:rollback
 
 # Resetear base de datos completa
-bundle exec rails db:drop db:create db:migrate db:seed
+bundle exec rails db:drop db:create db:migrate
 ```
 
 ### Gestión de usuarios
@@ -436,10 +427,6 @@ kill -9 PID
 # O usar otro puerto
 bundle exec rails server -p 3001
 ```
-
-## 📞 Contacto y Soporte
-
-Para dudas o problemas durante la configuración, contacta al equipo de desarrollo.
 
 ---
 

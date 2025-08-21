@@ -148,19 +148,6 @@ createdb chatwoot_development 2>/dev/null || print_warning "La base de datos ya 
 bundle exec rails db:migrate
 print_status "Migraciones ejecutadas"
 
-# Configurar usuario de acceso
-echo "👤 Configurando usuario de acceso..."
-bundle exec rails runner "
-user = User.find_or_create_by(email: 'admin@chatwoot.local') do |u|
-  u.name = 'Administrador'
-  u.password = 'Balcami123_'
-  u.password_confirmation = 'Balcami123_'
-end
-user.update!(password: 'Balcami123_', password_confirmation: 'Balcami123_')
-puts '✅ Usuario configurado: admin@chatwoot.local / Balcami123_'
-"
-print_status "Usuario de acceso configurado"
-
 # Agregar RVM al bashrc si no está
 if ! grep -q "source ~/.rvm/scripts/rvm" ~/.bashrc; then
     echo 'source ~/.rvm/scripts/rvm' >> ~/.bashrc
@@ -173,8 +160,6 @@ echo ""
 echo "�� INFORMACIÓN DE ACCESO:"
 echo "=========================="
 echo "URL: http://localhost:3000"
-echo "Email: admin@chatwoot.local"
-echo "Contraseña: Balcami123_"
 echo ""
 echo "🚀 PARA INICIAR EL SERVIDOR:"
 echo "============================="
